@@ -1,4 +1,3 @@
- // If you're using Next.js 13+ and need client-side behavior
 
 import { useState, useEffect } from "react";
 import styled from "styled-components";
