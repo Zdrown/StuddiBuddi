@@ -1,12 +1,12 @@
-// Utility function to safely access localStorage
+import { v4 as uuidv4 } from "uuid"; // Ensure UUID for unique IDs
+
 const isBrowser = () => typeof window !== "undefined";
 
 // Fetch all subjects from local storage
 export const getSubjects = () => {
   if (!isBrowser()) {
-    return []; // Return an empty array during server-side rendering
+    return [];
   }
-
   const data = localStorage.getItem("subjects");
   return data ? JSON.parse(data) : [];
 };
@@ -17,9 +17,8 @@ export const addSubject = (title) => {
     console.warn("localStorage is not available on the server.");
     return;
   }
-
   const subjects = getSubjects();
-  const newSubject = { id: Date.now().toString(), title, subcategories: [] };
+  const newSubject = { id: uuidv4(), title, subcategories: [] };
   subjects.push(newSubject);
   localStorage.setItem("subjects", JSON.stringify(subjects));
 };
@@ -30,13 +29,14 @@ export const addSubcategory = (subjectId, title) => {
     console.warn("localStorage is not available on the server.");
     return;
   }
-
   const subjects = getSubjects();
   const subject = subjects.find((sub) => sub.id === subjectId);
   if (subject) {
-    const newSubcategory = { id: Date.now().toString(), title, notes: [] };
+    const newSubcategory = { id: uuidv4(), title, notes: [] };
     subject.subcategories.push(newSubcategory);
     localStorage.setItem("subjects", JSON.stringify(subjects));
+  } else {
+    console.error(`Subject with ID ${subjectId} not found.`);
   }
 };
 
@@ -44,23 +44,20 @@ export const addSubcategory = (subjectId, title) => {
 export const addNote = (subcategoryId, text) => {
   if (!isBrowser()) {
     console.warn("localStorage is not available on the server.");
-    return;
+    return [];
   }
-
   const subjects = getSubjects();
   let updatedNotes = [];
-
   for (const subject of subjects) {
     const subcategory = subject.subcategories.find((sc) => sc.id === subcategoryId);
     if (subcategory) {
-      const newNote = { id: Date.now().toString(), text };
-      subcategory.notes = subcategory.notes || []; // Ensure notes array exists
-      subcategory.notes.push(newNote); // Add the new note
+      const newNote = { id: uuidv4(), text };
+      subcategory.notes = subcategory.notes || [];
+      subcategory.notes.push(newNote);
       updatedNotes = subcategory.notes;
-      break; // Exit loop once the correct subcategory is found
+      break;
     }
   }
-
   localStorage.setItem("subjects", JSON.stringify(subjects));
   return updatedNotes;
 };
@@ -69,24 +66,21 @@ export const addNote = (subcategoryId, text) => {
 export const updateNote = (subcategoryId, noteId, newText) => {
   if (!isBrowser()) {
     console.warn("localStorage is not available on the server.");
-    return;
+    return [];
   }
-
   const subjects = getSubjects();
   let updatedNotes = [];
-
   for (const subject of subjects) {
     const subcategory = subject.subcategories.find((sc) => sc.id === subcategoryId);
     if (subcategory) {
       const note = subcategory.notes.find((n) => n.id === noteId);
       if (note) {
-        note.text = newText; // Update the note's text
+        note.text = newText;
         updatedNotes = subcategory.notes;
       }
-      break; // Exit loop once the correct subcategory is found
+      break;
     }
   }
-
   localStorage.setItem("subjects", JSON.stringify(subjects));
   return updatedNotes;
 };
@@ -95,21 +89,18 @@ export const updateNote = (subcategoryId, noteId, newText) => {
 export const deleteNote = (subcategoryId, noteId) => {
   if (!isBrowser()) {
     console.warn("localStorage is not available on the server.");
-    return;
+    return [];
   }
-
   const subjects = getSubjects();
   let updatedNotes = [];
-
   for (const subject of subjects) {
     const subcategory = subject.subcategories.find((sc) => sc.id === subcategoryId);
     if (subcategory) {
-      subcategory.notes = subcategory.notes.filter((n) => n.id !== noteId); // Remove the note
+      subcategory.notes = subcategory.notes.filter((n) => n.id !== noteId);
       updatedNotes = subcategory.notes;
-      break; // Exit loop once the correct subcategory is found
+      break;
     }
   }
-
   localStorage.setItem("subjects", JSON.stringify(subjects));
   return updatedNotes;
 };

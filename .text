@@ -1,0 +1,7 @@
+TODO: 
+REAL TIME RENDERS AND SAVES IN PERSISTENT STORAGE ON Notes page ,
+change notes header above review 
+change ui to have constient ui throughout 
+link to add a subject from button 
+make sure all rewviews are saved an not rerendered snd overwritten about new reviews 
+i think the api request only expects a singl q and a not multiple so fix this 

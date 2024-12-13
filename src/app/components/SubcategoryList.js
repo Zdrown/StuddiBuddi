@@ -1,4 +1,4 @@
-// SubcategoryList.js: Lists all subcategories for a given subject.
+import Link from "next/link";
 import { getSubjects } from "../localStorageHelpers";
 
 export default function SubcategoryList({ subjectId }) {
@@ -8,13 +8,11 @@ export default function SubcategoryList({ subjectId }) {
 
   return (
     <ul>
-      {/* Loop through and display all subcategories */}
       {subcategories.map((subcategory) => (
         <li key={subcategory.id}>
-          {/* Link to individual subcategory page */}
-          <a href={`/subject/${subjectId}/subcategory/${subcategory.id}`}>
+          <Link href={`/subject/${subjectId}/subcategory/${subcategory.id}`} scroll={false}>
             {subcategory.title}
-          </a>
+          </Link>
         </li>
       ))}
     </ul>

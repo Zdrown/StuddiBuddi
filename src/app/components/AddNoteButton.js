@@ -39,7 +39,7 @@ export default function NotesList({ subcategoryId, notes, onNotesChange }) {
           ))}
         </ul>
       )}
-      <button type="button" onClick={handleAddNote}>Add Note</button>
+      <button type="button" onClick={handleAddNote}>Chad Note</button>
     </div>
   );
 }

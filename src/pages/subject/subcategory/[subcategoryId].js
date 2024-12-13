@@ -2,137 +2,167 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { getSubjects } from "../../../app/localStorageHelpers";
 import NotesList from "../../../app/components/NotesList";
-import axios from "axios"; // Assuming you're using axios to make API calls
+import axios from "axios";
+import styled from "styled-components";
+
+// Styled Components
+const ReviewSection = styled.div`
+  margin-top: 20px;
+`;
+
+const NoteWrapper = styled.div`
+  margin-bottom: 15px;
+
+`;
+
+const StyledTextarea = styled.textarea`
+  width: 100%;
+  height: 150px; // Adjust height
+  font-size: 16px; // Adjust font size
+  padding: 10px; // Add padding
+  border: 1px solid #ccc; // Optional: border styling
+  border-radius: 5px; // Optional: rounded corners
+  box-sizing: border-box; // Ensures padding doesn't affect overall size
+  resize: vertical; // Allow vertical resizing by the user if needed
+`;
+
+
+const ResultBox = styled.div`
+  background-color: #f0f8ff;
+  padding: 10px;
+  border-radius: 5px;
+  margin-top: 10px;
+  border: 1px solid #007bff;
+`;
+
+const ErrorBox = styled.div`
+  background-color: #ffe6e6;
+  padding: 10px;
+  border-radius: 5px;
+  margin-top: 10px;
+  border: 1px solid #ff0000;
+`;
 
 export default function SubcategoryPage() {
   const router = useRouter();
   const { subcategoryId } = router.query; // Extract subcategoryId from the URL
   const [subcategory, setSubcategory] = useState(null); // State for the current subcategory
   const [loading, setLoading] = useState(true); // Loading state
-  const [isReviewing, setIsReviewing] = useState(false); // Review mode state
   const [questions, setQuestions] = useState([]); // Store questions for review
   const [answers, setAnswers] = useState({}); // Store answers from user
-  const [result, setResult] = useState(""); // Store API result after submission
+  const [reviewResults, setReviewResults] = useState({}); // Store API results per note
+  const [reviewLoading, setReviewLoading] = useState({}); // Manage loading state for each note
+  const [errorMessages, setErrorMessages] = useState({}); // Store errors for each note
+  const [isReviewing, setIsReviewing] = useState(false); // Review mode state
 
   // Fetch subcategory details from localStorage
   useEffect(() => {
-    if (!subcategoryId) return; // Avoid running if subcategoryId is not yet available
+    if (!subcategoryId) return;
 
     const subjects = getSubjects();
-    let foundSubcategory = null;
+    const subcategory = subjects
+      .flatMap((subject) => subject.subcategories)
+      .find((sc) => sc.id === subcategoryId);
 
-    // Loop through subjects to find the matching subcategory
-    for (const subject of subjects) {
-      const subcategory = subject.subcategories.find(
-        (sc) => sc.id === subcategoryId
-      );
-      if (subcategory) {
-        foundSubcategory = subcategory;
-        break;
-      }
-    }
-
-    // Ensure `notes` exists and default to an empty array if not
-    setSubcategory(foundSubcategory ? { ...foundSubcategory, notes: foundSubcategory.notes || [] } : null);
-    setLoading(false); // Mark loading complete
+    setSubcategory(subcategory || { notes: [] });
+    setLoading(false);
   }, [subcategoryId]);
 
   // Handler for notes update
   const handleNotesChange = (updatedNotes) => {
-    setSubcategory((prev) => (prev ? { ...prev, notes: updatedNotes } : null)); // Update notes in state
-  };
-
-  // Handle review mode
-  const startReview = () => {
-    setIsReviewing(true);
-
-    // Create questions from notes
-    const generatedQuestions = subcategory.notes.map((note) => ({
-      id: note.id,
-      question: `What is important about: ${note.text}?`,
-    }));
-    setQuestions(generatedQuestions);
+    setSubcategory((prev) => (prev ? { ...prev, notes: updatedNotes } : null));
   };
 
   // Handle answer change for each note
   const handleAnswerChange = (noteId, text) => {
-    setAnswers((prevAnswers) => ({
-      ...prevAnswers,
+    setAnswers((prev) => ({
+      ...prev,
       [noteId]: text,
     }));
   };
 
-  // Handle review submission
-  const handleReviewSubmit = async () => {
-    try {
-      const questionAnswerPairs = questions.map((q) => ({
-        question: q.question,
-        answer: answers[q.id] || "",
-      }));
+  // Start review mode
+  const startReview = () => {
+    setIsReviewing(true);
 
-      // Send questions and answers to the Gemini API (assuming you are using axios)
+    const generatedQuestions = subcategory.notes.map((note) => ({
+      id: note.id,
+      question: `What is important about: ${note.text}?`,
+    }));
+
+    setQuestions(generatedQuestions);
+  };
+
+  // Submit individual note review
+  const handleReviewSubmit = async (note) => {
+    setReviewLoading((prev) => ({ ...prev, [note.id]: true }));
+    setErrorMessages((prev) => ({ ...prev, [note.id]: "" }));
+
+    try {
       const response = await axios.post("/api/review", {
-        questionAnswerPairs,
+        questionAnswerPairs: [
+          {
+            id: note.id,
+            question: `What is important about: ${note.text}`,
+            answer: answers[note.id] || "",
+          },
+        ],
       });
 
-      setResult(response.data.result); // Display the response from the API
+      const result = response.data.results[0]?.result || "No response received.";
+
+      setReviewResults((prev) => ({
+        ...prev,
+        [note.id]: result,
+      }));
     } catch (error) {
-      console.error("Error submitting review:", error);
-      setResult("Error processing the review.");
+      console.error(`Error processing note ID ${note.id}:`, error);
+      setErrorMessages((prev) => ({
+        ...prev,
+        [note.id]: "Error processing this note.",
+      }));
+    } finally {
+      setReviewLoading((prev) => ({ ...prev, [note.id]: false }));
     }
   };
 
-  if (loading) {
-    return <p>Loading subcategory...</p>;
-  }
-
-  if (!subcategory) {
-    return <p>Subcategory not found. Please go back and select a valid subcategory.</p>;
-  }
+  if (loading) return <p>Loading subcategory...</p>;
+  if (!subcategory) return <p>Subcategory not found.</p>;
 
   return (
     <div>
       <h1>{subcategory.title || "Subcategory"}</h1>
-      <h2>Notes</h2>
-
-      {subcategory.notes.length > 0 ? (
-        <ul>
-          {subcategory.notes.map((note) => (
-            <li key={note.id}>
-              <span>{note.text}</span>
-              {isReviewing && (
-                <div>
-                  <input
-                    type="text"
-                    placeholder="Your answer"
-                    value={answers[note.id] || ""}
-                    onChange={(e) => handleAnswerChange(note.id, e.target.value)}
-                  />
-                </div>
-              )}
-            </li>
-          ))}
-        </ul>
-      ) : (
-        <p>No notes available for this subcategory.</p>
-      )}
-
-      <div>
-        {!isReviewing ? (
-          <button type="button" onClick={startReview}>Start Review</button>
-        ) : (
-          <>
-            <button type="button" onClick={handleReviewSubmit}>Submit Review</button>
-            {result && <p>{result}</p>} {/* Display the result from the LLM */}
-          </>
-        )}
-      </div>
-
-      {/* Add Note Button */}
+      <h2>Review Notes</h2>
+      <ReviewSection>
+        {subcategory.notes.map((note) => (
+          <NoteWrapper key={note.id}>
+            <p>{note.text}</p>
+            <StyledTextarea
+  placeholder="Write your answer here..."
+  onChange={(e) => handleAnswerChange(note.id, e.target.value)}
+/>
+            <button
+              type="button"
+              onClick={() => handleReviewSubmit(note)}
+              disabled={reviewLoading[note.id]}
+            >
+              {reviewLoading[note.id] ? "Submitting..." : "Submit Review"}
+            </button>
+            {reviewResults[note.id] && (
+              <ResultBox>
+                <strong>Result:</strong> {reviewResults[note.id]}
+              </ResultBox>
+            )}
+            {errorMessages[note.id] && (
+              <ErrorBox>{errorMessages[note.id]}</ErrorBox>
+            )}
+          </NoteWrapper>
+        ))}
+      </ReviewSection>
       <NotesList
         subcategoryId={subcategoryId}
-        notes={subcategory.notes} // Pass notes to the NotesList component
-        onNotesChange={handleNotesChange} // Pass handler to update notes
+        notes={subcategory.notes}
+        onNotesChange={handleNotesChange}
       />
     </div>
   );

@@ -2,6 +2,16 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { getSubjects } from "../../app/localStorageHelpers";
 import AddSubcategoryButton from "../../app/components/AddSubcategoryButton";
+import Link from "next/link";
+import styled from "styled-components";
+
+const StyledLink = styled.a`
+  text-decoration: none;
+  color: #007bff;
+  &:hover {
+    text-decoration: underline;
+  }
+`;
 
 export default function SubjectPage() {
   const router = useRouter();
@@ -37,9 +47,9 @@ export default function SubjectPage() {
         <ul>
           {subject.subcategories.map((subcategory) => (
             <li key={subcategory.id}>
-              <a href={`/subject/subcategory/${subcategory.id}`}>
-                {subcategory.title}
-              </a>
+              <Link href={`/subject/subcategory/${subcategory.id}`} passHref>
+                <StyledLink>{subcategory.title}</StyledLink>
+              </Link>
             </li>
           ))}
         </ul>

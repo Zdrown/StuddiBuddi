@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+/*import { useState, useEffect } from "react";
 import axios from "axios"; // Axios for backend API calls
 
 export default function ReviewNotes({ subcategoryId, notes }) {
@@ -79,3 +79,4 @@ export default function ReviewNotes({ subcategoryId, notes }) {
     </div>
   );
 }
+*/

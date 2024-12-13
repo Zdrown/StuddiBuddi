@@ -1,6 +1,5 @@
 import styled from "styled-components";
 import Sidebar from "./SideBar";
-import Link from "next/link";
 
 const LayoutContainer = styled.div`
   display: flex;
@@ -35,7 +34,8 @@ const SidebarWrapper = styled.div`
 const MainContent = styled.main`
   flex-grow: 1;
   padding: 80px 20px;
-  margin-left: 250px;
+  margin-left: 50px;
+  overflow: auto; /* Ensures scrollable content */
 `;
 
 const Footer = styled.footer`
@@ -49,22 +49,8 @@ const Footer = styled.footer`
   box-shadow: 0px -2px 4px rgba(0, 0, 0, 0.1);
 `;
 
-const Button = styled.button`
-  background-color: #0070f3;
-  color: #fff;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  margin-top: 20px;
-  font-size: 16px;
-
-  &:hover {
-    background-color: #005bb5;
-  }
-`;
-
 export default function Layout({ children, categories }) {
+  console.log("Layout rendered with children:", children);
   return (
     <>
       <Header>
@@ -74,12 +60,7 @@ export default function Layout({ children, categories }) {
         <SidebarWrapper>
           <Sidebar categories={categories} />
         </SidebarWrapper>
-        <MainContent>
-          {children}
-          <Link href="/subjectlist" passHref>
-            <Button>Study Like a Pro: Add a Subject</Button>
-          </Link>
-        </MainContent>
+        <MainContent>{children}</MainContent>
       </LayoutContainer>
       <Footer>
         <p>© 2024 StuddiBuddi. All Rights Reserved.</p>

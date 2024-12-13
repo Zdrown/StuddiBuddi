@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { getSubjects } from "../localStorageHelpers";
+import Link from "next/link"; // Import Link from Next.js
 import styled from "styled-components";
 
 const SidebarWrapper = styled.div`
@@ -51,18 +52,24 @@ export default function Sidebar() {
 
   return (
     <SidebarWrapper>
-      <SidebarHeading>Subjects</SidebarHeading>
+      <SidebarHeading>Your Subjects</SidebarHeading>
       <SubjectList>
         {subjects.map((subject) => (
           <li key={subject.id}>
-            <SidebarLink href={`/subject/${subject.id}`}>{subject.title}</SidebarLink>
+            {/* Use Link for client-side navigation */}
+            <Link href={`/subject/${subject.id}`} passHref>
+              <SidebarLink>{subject.title}</SidebarLink>
+            </Link>
             {subject.subcategories.length > 0 && (
               <SubList>
                 {subject.subcategories.map((subcategory) => (
                   <li key={subcategory.id}>
-                    <SidebarLink href={`/subject/${subject.id}/subcategory/${subcategory.id}`}>
-                      {subcategory.title}
-                    </SidebarLink>
+                    <Link
+                      href={`/subject/${subject.id}/subcategory/${subcategory.id}`}
+                      passHref
+                    >
+                      <SidebarLink>{subcategory.title}</SidebarLink>
+                    </Link>
                   </li>
                 ))}
               </SubList>
