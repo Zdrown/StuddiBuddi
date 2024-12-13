@@ -4,9 +4,7 @@ const isBrowser = () => typeof window !== "undefined";
 
 // Fetch all subjects from local storage
 export const getSubjects = () => {
-  if (!isBrowser()) {
-    return [];
-  }
+  if (!isBrowser()) return [];
   const data = localStorage.getItem("subjects");
   return data ? JSON.parse(data) : [];
 };
@@ -25,10 +23,7 @@ export const addSubject = (title) => {
 
 // Add a new subcategory to a subject
 export const addSubcategory = (subjectId, title) => {
-  if (!isBrowser()) {
-    console.warn("localStorage is not available on the server.");
-    return;
-  }
+  if (!isBrowser()) return;
   const subjects = getSubjects();
   const subject = subjects.find((sub) => sub.id === subjectId);
   if (subject) {
@@ -42,10 +37,7 @@ export const addSubcategory = (subjectId, title) => {
 
 // Add a new note to a specific subcategory
 export const addNote = (subcategoryId, text) => {
-  if (!isBrowser()) {
-    console.warn("localStorage is not available on the server.");
-    return [];
-  }
+  if (!isBrowser()) return [];
   const subjects = getSubjects();
   let updatedNotes = [];
   for (const subject of subjects) {
@@ -64,10 +56,7 @@ export const addNote = (subcategoryId, text) => {
 
 // Update an existing note
 export const updateNote = (subcategoryId, noteId, newText) => {
-  if (!isBrowser()) {
-    console.warn("localStorage is not available on the server.");
-    return [];
-  }
+  if (!isBrowser()) return [];
   const subjects = getSubjects();
   let updatedNotes = [];
   for (const subject of subjects) {
@@ -87,10 +76,7 @@ export const updateNote = (subcategoryId, noteId, newText) => {
 
 // Delete a note
 export const deleteNote = (subcategoryId, noteId) => {
-  if (!isBrowser()) {
-    console.warn("localStorage is not available on the server.");
-    return [];
-  }
+  if (!isBrowser()) return [];
   const subjects = getSubjects();
   let updatedNotes = [];
   for (const subject of subjects) {
@@ -103,4 +89,12 @@ export const deleteNote = (subcategoryId, noteId) => {
   }
   localStorage.setItem("subjects", JSON.stringify(subjects));
   return updatedNotes;
+};
+
+// **NEW**: Delete an entire subject (and all of its subcategories/notes)
+export const deleteSubject = (subjectId) => {
+  if (!isBrowser()) return;
+  const subjects = getSubjects();
+  const updatedSubjects = subjects.filter((subject) => subject.id !== subjectId);
+  localStorage.setItem("subjects", JSON.stringify(updatedSubjects));
 };

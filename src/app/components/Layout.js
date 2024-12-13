@@ -1,3 +1,5 @@
+"use client"; // If you're on Next.js 13 App Router and need client-side features
+
 import styled from "styled-components";
 import Sidebar from "./SideBar";
 
@@ -29,13 +31,14 @@ const SidebarWrapper = styled.div`
   background-color: #f4f4f4;
   padding-top: 60px;
   border-right: 1px solid #ddd;
+ 
 `;
 
 const MainContent = styled.main`
   flex-grow: 1;
   padding: 80px 20px;
   margin-left: 50px;
-  overflow: auto; /* Ensures scrollable content */
+  overflow: auto;
 `;
 
 const Footer = styled.footer`
@@ -49,8 +52,9 @@ const Footer = styled.footer`
   box-shadow: 0px -2px 4px rgba(0, 0, 0, 0.1);
 `;
 
-export default function Layout({ children, categories }) {
-  console.log("Layout rendered with children:", children);
+export default function Layout({ children, categories, onAddCategory }) {
+  console.log("Layout rendered with categories:", categories);
+
   return (
     <>
       <Header>
@@ -58,7 +62,8 @@ export default function Layout({ children, categories }) {
       </Header>
       <LayoutContainer>
         <SidebarWrapper>
-          <Sidebar categories={categories} />
+          {/* Pass categories and onAddCategory to Sidebar */}
+          <Sidebar categories={categories} onAddCategory={onAddCategory} />
         </SidebarWrapper>
         <MainContent>{children}</MainContent>
       </LayoutContainer>
