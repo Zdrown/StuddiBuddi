@@ -1,4 +1,4 @@
-"use client"; // If you're on Next.js 13 App Router and need client-side features
+ // If you're on Next.js 13 App Router and need client-side features
 
 import styled from "styled-components";
 import Sidebar from "./SideBar";
