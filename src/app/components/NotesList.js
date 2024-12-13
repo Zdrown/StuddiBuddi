@@ -5,8 +5,8 @@ export default function NotesList({ subcategoryId, notes = [], onNotesChange }) 
     const text = prompt("Enter the note:");
     if (text) {
       try {
-        const updatedSubcategory = addNote(subcategoryId, text);
-        onNotesChange(updatedSubcategory.notes || []); // Ensure notes is an array
+        const updatedNotes = addNote(subcategoryId, text); // Returns updated notes
+        onNotesChange(updatedNotes); // Pass the updated notes back to the parent
       } catch (error) {
         console.error("Error adding note:", error);
         alert("Failed to add the note. Please try again.");
@@ -19,7 +19,7 @@ export default function NotesList({ subcategoryId, notes = [], onNotesChange }) 
     if (updatedText) {
       try {
         const updatedNotes = updateNote(subcategoryId, noteId, updatedText);
-        onNotesChange(updatedNotes || []); // Ensure notes is an array
+        onNotesChange(updatedNotes);
       } catch (error) {
         console.error("Error updating note:", error);
         alert("Failed to update the note. Please try again.");
@@ -31,7 +31,7 @@ export default function NotesList({ subcategoryId, notes = [], onNotesChange }) 
     if (window.confirm("Are you sure you want to delete this note?")) {
       try {
         const updatedNotes = deleteNote(subcategoryId, noteId);
-        onNotesChange(updatedNotes || []); // Ensure notes is an array
+        onNotesChange(updatedNotes);
       } catch (error) {
         console.error("Error deleting note:", error);
         alert("Failed to delete the note. Please try again.");
@@ -42,11 +42,11 @@ export default function NotesList({ subcategoryId, notes = [], onNotesChange }) 
   return (
     <div>
       <h2>Notes</h2>
-      {notes && notes.length === 0 ? (
+      {notes.length === 0 ? (
         <p>No notes available for this subcategory.</p>
       ) : (
         <ul>
-          {notes?.map((note) => (
+          {notes.map((note) => (
             <li key={note.id}>
               <span>{note.text}</span>
               <button type="button" onClick={() => handleEditNote(note.id)}>
