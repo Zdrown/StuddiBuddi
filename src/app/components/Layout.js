@@ -48,7 +48,7 @@ const Footer = styled.footer`
   padding: 10px 0;
   position: relative;
   bottom: 0;
-  width: 100%;
+  width: 100vw
   box-shadow: 0px -2px 4px rgba(0, 0, 0, 0.1);
 `;
 
