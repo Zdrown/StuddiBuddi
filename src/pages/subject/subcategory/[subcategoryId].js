@@ -14,7 +14,28 @@ const NoteWrapper = styled.div`
   margin-bottom: 15px;
 
 `;
+const ReviewButton = styled.button`
+  display: block;
+  width: 20%; /* Correctly added semicolon */
+  margin: 20px auto 0;
+  background-color: #0070f3;
+  color: #fff;
+  font-size: 16px;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
 
+  &:hover {
+    background-color: #005bbd;
+  }
+
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(0, 112, 243, 0.3);
+  }
+`;
 const StyledTextarea = styled.textarea`
   width: 100%;
   height: 150px; // Adjust height
@@ -141,13 +162,13 @@ export default function SubcategoryPage() {
   placeholder="Write your answer here..."
   onChange={(e) => handleAnswerChange(note.id, e.target.value)}
 />
-            <button
+            <ReviewButton 
               type="button"
               onClick={() => handleReviewSubmit(note)}
               disabled={reviewLoading[note.id]}
             >
               {reviewLoading[note.id] ? "Submitting..." : "Submit Review"}
-            </button>
+            </ReviewButton >
             {reviewResults[note.id] && (
               <ResultBox>
                 <strong>Result:</strong> {reviewResults[note.id]}

@@ -10,6 +10,7 @@ const NotesContainer = styled.div`
   background-color: #ffffff;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   border-radius: 8px;
+  
 `;
 
 const NotesHeader = styled.h2`
@@ -69,6 +70,7 @@ const AddNoteButton = styled.button`
   display: block;
   margin: 20px auto 0;
   background-color: #0070f3;
+   width: 20%;
   color: #fff;
   font-size: 16px;
   padding: 12px 24px;

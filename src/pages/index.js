@@ -21,9 +21,13 @@ const HeroHeading = styled.h1`
   font-size: 48px;
   font-weight: 700;
   margin-bottom: 20px;
+  font-family: "Poppins", sans-serif;
+
 `;
 
+
 const HeroParagraph = styled.p`
+font-family: "Poppins", sans-serif;
   font-size: 20px;
   max-width: 600px;
   margin-bottom: 30px;
@@ -37,6 +41,7 @@ const SubjectsContainer = styled.div`
 const SubjectStatus = styled.p`
   font-size: 16px;
   color: #f1f1f1;
+  font-family: "Poppins", sans-serif;
 `;
 
 export default function Home() {
