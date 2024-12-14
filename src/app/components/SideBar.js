@@ -4,16 +4,21 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import styled from "styled-components";
 import { getSubjects, deleteSubject } from "../localStorageHelpers";
+import AddSubjectButton from "../../app/components/AddSubjectButton";
+
 
 const SidebarWrapper = styled.div`
-  width: 300px; /* Slightly wider for modern design */
+  width:23vw; /* Slightly wider for modern design */
   background: linear-gradient(135deg, #0070f3 0%, #57a0ff 100%);
   color: #fff;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   border-radius: 8px;
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  height: 80vh;
+  
+
+
 `;
 
 const SidebarHeading = styled.h2`
@@ -121,28 +126,7 @@ const SubListItem = styled.li`
   }
 `;
 
-const AddSubjectButton = styled.button`
-  margin-top: 20px;
-  background-color: #ffffff;
-  color: #0070f3;
-  font-size: 16px;
-  font-weight: bold;
-  padding: 10px 16px;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  transition: background-color 0.2s ease, color 0.2s ease;
 
-  &:hover {
-    background-color: #f5f5f5;
-    color: #005bbd;
-  }
-
-  &:focus {
-    outline: none;
-    box-shadow: 0 0 0 2px rgba(0, 112, 243, 0.5);
-  }
-`;
 
 export default function Sidebar() {
   const [subjects, setSubjects] = useState([]);
@@ -160,6 +144,15 @@ export default function Sidebar() {
     deleteSubject(subjectId);
     setSubjects((prev) => prev.filter((subject) => subject.id !== subjectId));
     setOpenDropdown(null);
+  };
+
+  const handleAddSubject = () => {
+    const newTitle = prompt("Enter the new subject name:");
+    if (newTitle) {
+      addSubject(newTitle.trim());
+      setSubjects(getSubjects()); // Update the local state
+      onSubjectAdded(); // Notify parent to refresh its state if needed
+    }
   };
 
   return (
@@ -198,7 +191,9 @@ export default function Sidebar() {
           </SubjectItem>
         ))}
       </SubjectList>
-      <AddSubjectButton>Add New Subject</AddSubjectButton>
+      <AddSubjectButton onClick={handleAddSubject}>
+        Add New Subject
+      </AddSubjectButton>
     </SidebarWrapper>
   );
 }
