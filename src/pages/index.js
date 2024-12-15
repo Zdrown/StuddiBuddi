@@ -22,13 +22,23 @@ const HeroSection = styled.section`
   height: 40vh;
 
 `;
+const IconWrapper = styled.div`
+  position: relative;
+  margin-top: -2vh; /* Move down */
+  margin-left: -50vw; /* Move left */
+  width: 100px;
+  height: 100px;
+  
+`;
+
 
 const HeroHeading = styled.h1`
   font-size: 48px;
   font-weight: 700;
   font-family: "Poppins", sans-serif;
-  margin-bottom: 20px;
+  margin-bottom: -9vh;
   text-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+  margin-left: -1vw;
 `;
 
 const HeroParagraph = styled.p`
@@ -69,34 +79,17 @@ export default function Home() {
     <>
       <HeroSection>
         <HeroHeading>Welcome to StuddiBuddi
-        <svg
-  xmlns="http://www.w3.org/2000/svg"
-  viewBox="0 0 48 48"
-  width="48"
-  height="48"
-  fill="none"
-  stroke="white"
-  strokeWidth="2"
-  strokeLinecap="round"
-  strokeLinejoin="round"
-  aria-labelledby="pencilAppleIconTitle"
->
-  <title id="pencilAppleIconTitle">Stylized Pencil and Apple Icon</title>
   
-
-  <path d="M24 16c6 0 10 4 10 10s-4 10-10 10-10-4-10-10 4-10 10-10z" />
-  <path d="M22 8c2-1 4 1 4 3s-2 3-4 1" /> 
-
- 
-  <path d="M10 34l8-8" />
-  <path d="M6 38l4-4" /> 
-  <path d="M8 36l2 2" /> 
-  <path d="M6 38l2-2" /> 
-</svg>
-
-
         </HeroHeading>
-
+        <IconWrapper>
+          <img
+            src="/Book7.png"
+            alt="Realistic Book and Pencil Icon"
+            width="125"
+            height="125"
+          
+          />
+        </IconWrapper>
         <HeroParagraph>
           Streamline your learning with organized subjects and notes.
           Add a new subject to get started.
