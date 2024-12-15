@@ -3,6 +3,7 @@
 import styled from "styled-components";
 import Sidebar from "./SideBar";
 import { useRouter } from "next/router";
+import Pricing from "../../pages/Pricing";
 
 const LayoutContainer = styled.div`
   display: flex;
@@ -156,7 +157,9 @@ export default function Layout({ children, categories, onAddCategory }) {
     StuddiBuddi
   </Logo>
         <NavLinks>
-          <NavLink >Pricing</NavLink>
+        <NavLink onClick={() => router.push("/Pricing")}>
+  Pricing
+</NavLink>
           <NavLink >About</NavLink>
         </NavLinks>
       </Header>

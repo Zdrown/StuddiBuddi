@@ -36,6 +36,14 @@ const StatRow = styled.div`
   padding: 20px;
   border-radius: 12px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  position: relative; /* Ensure it doesn't affect surrounding layout */
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  will-change: transform, box-shadow; /* Hint browser for optimization */
+
+  &:hover {
+    transform: translateY(-5px); /* Smaller, smoother translation */
+    box-shadow: 0 6px 15px rgba(0, 112, 243, 0.3); /* Simplified shadow */
+  }
 `;
 
 const StatTitle = styled.h3`
@@ -60,6 +68,7 @@ const ProgressBarContainer = styled.div`
   width: 100%;
   overflow: hidden;
   margin-top: 8px;
+  
 `;
 
 const ProgressBarFill = styled.div`

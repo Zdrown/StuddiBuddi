@@ -14,6 +14,20 @@ const NoteWrapper = styled.div`
   margin-bottom: 15px;
 
 `;
+
+const StyledNoteText = styled.p`
+  text-transform: capitalize; /* Automatically capitalize each word */
+  font-family: "Poppins", sans-serif; /* Custom font style */
+  font-size: 16px; /* Adjust font size */
+  color: #333; /* Text color */
+  margin: 0; /* Remove default margins */
+  line-height: 1.5; /* Adjust line spacing for readability */
+`;
+
+
+
+
+
 const ReviewButton = styled.button`
   display: block;
   width: 20%; /* Correctly added semicolon */
@@ -155,9 +169,10 @@ export default function SubcategoryPage() {
       <h1>{subcategory.title || "Subcategory"}</h1>
       <h2>Review Notes</h2>
       <ReviewSection>
-        {subcategory.notes.map((note) => (
-          <NoteWrapper key={note.id}>
-            <p>{note.text}</p>
+  {subcategory.notes.map((note) => (
+    <NoteWrapper key={note.id}>
+      {/* Auto-capitalized and styled note text */}
+      <StyledNoteText>{note.text}</StyledNoteText>
             <StyledTextarea
   placeholder="Write your answer here..."
   onChange={(e) => handleAnswerChange(note.id, e.target.value)}

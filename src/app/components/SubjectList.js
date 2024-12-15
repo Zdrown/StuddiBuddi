@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { getSubjects } from "../localStorageHelpers";
 import styled from "styled-components";
 
+
 const SubjectListContainer = styled.ul`
   list-style: none;
   padding: 0;
@@ -11,6 +12,8 @@ const SubjectListContainer = styled.ul`
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   padding: 16px;
 `;
+
+
 
 const SubjectListItem = styled.li`
   padding: 12px 16px;
@@ -25,6 +28,7 @@ const SubjectListItem = styled.li`
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
   }
 `;
+
 
 const StyledLink = styled.a`
   text-decoration: none;

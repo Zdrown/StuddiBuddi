@@ -4,6 +4,7 @@ import { getSubjects } from "../../app/localStorageHelpers";
 import AddSubcategoryButton from "../../app/components/AddSubcategoryButton";
 import Link from "next/link";
 import styled from "styled-components";
+import ShareSubjectButton from "../../app/components/ShareButton";
 
 const SubjectContainer = styled.div`
   max-width: 800px;
@@ -19,7 +20,8 @@ const SubjectTitle = styled.h1`
   font-weight: bold;
   color: #333;
   font-family: "Poppins", sans-serif;
-  margin-bottom: 16px;
+  margin-bottom: -9vh;
+  margin-left: 8vw;
 `;
 
 const SubcategoryHeading = styled.h2`
@@ -47,6 +49,14 @@ const SubcategoryItem = styled.li`
     transform: scale(1.02);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
   }
+`;
+
+const IconWrapperBook = styled.div`
+  display: flex;
+  /* Align to the right */
+  margin-top: -3vh;
+  margin-left: -1vw; /* Optional: Move down slightly */
+  width: 100%; /* Take up full width */
 `;
 
 const StyledLink = styled.a`
@@ -97,6 +107,19 @@ export default function SubjectPage() {
   return (
     <SubjectContainer>
       <SubjectTitle>{subject.title}</SubjectTitle>
+      <IconWrapperBook>
+          <img
+            src="/Book7.png"
+            alt="Realistic Book and Pencil Icon"
+            width="125"
+            height="125"
+          
+          />
+        </IconWrapperBook>
+      <ShareSubjectButton
+        subjectTitle={subject.title}
+        notes={subject.subcategories.map((sub) => sub.title)}
+      />
       <SubcategoryHeading>Subcategories</SubcategoryHeading>
       {subject.subcategories && subject.subcategories.length > 0 ? (
         <SubcategoryList>

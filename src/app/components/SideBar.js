@@ -16,6 +16,8 @@ const SidebarWrapper = styled.div`
   display: flex;
   flex-direction: column;
   height: 80vh;
+  margin-left: 0vw;
+  
   
 
 
